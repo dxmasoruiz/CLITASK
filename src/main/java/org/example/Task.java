@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Task {
     public  enum TaskStatus{
         IN_PROGRESS,
@@ -16,6 +17,8 @@ public class Task {
     private String createdAt;
     private String updatedAt;
 
+    public Task() {
+    }
     public Task(int id, String description) {
         this.id = id;
         this.description = description;
@@ -73,8 +76,25 @@ public class Task {
         return map;
     }
 
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public String toString() {
-        return "[" + id + "] " + description + " (" + status + ") - Creado: " + createdAt + ", Actualizado: " + updatedAt;
+        return "[" + id + "] " + description + " (" + status + ") - Creado: " + createdAt + ", Actualizado: " + updatedAt+"\n";
     }
 }

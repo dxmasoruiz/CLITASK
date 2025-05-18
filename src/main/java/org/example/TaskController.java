@@ -19,6 +19,19 @@ public class TaskController {
         uploadData();
     }
 
+    public void changeState(int id ){
+        for (Task task : tasks ){
+            if ((task.getId()==id)){
+                if (task.getStatus() == Task.TaskStatus.IN_PROGRESS){task.setStatus(Task.TaskStatus.FINISHED);
+                }else {
+                    task.setStatus(Task.TaskStatus.IN_PROGRESS);
+                }
+
+            }
+        }
+
+    }
+
     public void createTask(String description) {
         int newId = getHighestId();
         newId = newId++;
@@ -27,14 +40,62 @@ public class TaskController {
         saveTasksToFile();
     }
 
+    public void deleteTask(int id ){
+        tasks.removeIf(t -> t.getId() == id );
+        saveTasksToFile();
+
+    }
+
     public  int getHighestId() {
         int maxId = 0;
-        for (Task task : this.tasks) {
-            if (task.getId() > maxId) {
-                maxId = task.getId();
+        if (!tasks.isEmpty()) {
+            for (Task task : this.tasks) {
+                if (task.getId() > maxId) {
+                    maxId = task.getId();
+                }
             }
         }
         return maxId;
+    }
+
+    public void listTasks(){
+        for(Task task : tasks){
+            System.out.println(task.toString());
+        }
+    }
+
+    public void listDone(){
+        for(Task task : tasks){
+            if (task.getStatus()== Task.TaskStatus.FINISHED) {
+                System.out.println(task.toString());
+            }
+        }
+    }
+
+    public void listNotDone(){
+        for(Task task : tasks){
+            if (task.getStatus()== Task.TaskStatus.IN_PROGRESS) {
+                System.out.println(task.toString());
+            }
+        }
+    }
+
+
+
+    public void  update (int id,String description){
+        Task searchedTask ;
+        boolean found = false;
+        for (Task task : tasks){
+            if (task.getId()==id){
+                task.setDescription(description);
+                saveTasksToFile();
+                found = true;
+                return;
+            }
+        }
+        if (!found){
+            System.out.println("No se encontro la tarea con el id especificado");
+        }
     }
 
 
@@ -60,10 +121,13 @@ public class TaskController {
 
         try {
             assert mapper != null;
-            // Leer la lista de tareas desde el archivo
-            List<Task> loadedTasks = mapper.readValue(file, new TypeReference<List<Task>>() {});
-            // Actualizar el atributo privado con la lista leída
-            this.tasks = loadedTasks;
+            if (file.length() == 0) {
+                this.tasks = new ArrayList<>();
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                this.tasks= mapper.readValue(file, new TypeReference<List<Task>>() {});
+            }
+
         } catch (Exception e) {
             System.out.println("Error al cargar tareas: " + e.getMessage());
         }

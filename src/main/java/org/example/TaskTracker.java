@@ -24,21 +24,31 @@ public class TaskTracker {
                 controller.createTask(contenidoComando);
                 break;
             case "update":
-                if (args.length < 2) {
-                    System.out.println("Uso: java TaskTracker update <nombre tarea>");
+                if (args.length < 3) {
+                    System.out.println("Uso: java TaskTracker update <id> <nombre tarea>");
                     return;
                 }
-                contenidoComando = args[1];
                 //Actualizar el nombre de la tarea
+                controller.update(Integer.parseInt(args[1]),args[2]);
                 break;
-            case "Delete":
+            case "delete":
                 if (args.length < 2) {
-                    System.out.println("Uso: java TaskTracker update <nombre tarea>");
+                    System.out.println("Uso: java TaskTracker delete <nombre tarea>");
                     return;
                 }
-                contenidoComando = args[1];
+               controller.deleteTask(Integer.parseInt(args[1]));
                 break;
-
+            case "list":
+                controller.listTasks();
+                break;
+            case "listdone":
+                controller.listDone();
+                break;
+            case "listnotdone":
+                controller.listNotDone();
+            case "changestate":
+                controller.changeState(Integer.parseInt(args[1]));
+                break;
         }
 
     }
